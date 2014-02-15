@@ -78,6 +78,16 @@
                 path="/home/wolf/AndroidStudioProjects/Whatcooking/app/src/main/res/layout/fragment_fullsize_image.xml"
                 qualifiers=""
                 type="layout" />
+            <file
+                name="fragment_recipe_overview"
+                path="/home/wolf/AndroidStudioProjects/Whatcooking/app/src/main/res/layout/fragment_recipe_overview.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="textview_layout"
+                path="/home/wolf/AndroidStudioProjects/Whatcooking/app/src/main/res/layout/textview_layout.xml"
+                qualifiers=""
+                type="layout" />
         </source>
         <source path="/home/wolf/AndroidStudioProjects/Whatcooking/app/build/res/rs/debug" />
         <source path="/home/wolf/AndroidStudioProjects/Whatcooking/app/build/res/generated/debug" />

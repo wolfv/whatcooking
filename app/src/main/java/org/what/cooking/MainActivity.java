@@ -17,8 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends Activity {
@@ -95,19 +98,21 @@ public class MainActivity extends Activity {
     }
 
 
-    private void displayPhoto() {
+    public void moveOn(View Target) {
+        Fragment fragment = new ViewRecipesFragment(this);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
+    private void displayPhoto() {
         Fragment fragment = new FullSizePicture(this);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-//        ((ImageView) findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
-//        Bitmap myBitmap = BitmapFactory.decodeFile(this.getPhotoFile().getAbsolutePath());
-//        this.fragment.on
-//                ((ImageView) this.fragment.getView().findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
-
     }
 
     String mCurrentPhotoPath;
@@ -217,7 +222,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static  class FullSizePicture extends Fragment {
+    public static class FullSizePicture extends Fragment {
         private MainActivity activity;
         public FullSizePicture(MainActivity activity) {
             this.activity = activity;
@@ -241,5 +246,38 @@ public class MainActivity extends Activity {
             Log.d("Created View", "Image View Created");
         }
     }
+
+    public static class ViewRecipesFragment extends Fragment {
+        private MainActivity activity;
+        public ViewRecipesFragment(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.fragment_recipe_overview, container, false);
+            return rootView;
+        }
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstance) {
+            Log.d("Created View", "Recipes View Created");
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(activity.getPhotoFile().getAbsolutePath());
+            ((ImageView)view.findViewById(R.id.halfsizeimage)).setImageBitmap(myBitmap);
+            ArrayList<String> arr = new ArrayList<String>();
+            arr.add("Test 1");
+            arr.add("Test 3");
+            arr.add("Test 1");
+
+            ListView lv = (ListView)view.findViewById(R.id.listView);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.activity, R.layout.textview_layout, arr);
+            lv.setAdapter(arrayAdapter);
+
+        }
+    }
+
 
 }
