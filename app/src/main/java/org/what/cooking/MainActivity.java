@@ -30,14 +30,16 @@ import java.util.Date;
 
 public class MainActivity extends Activity {
 
+    private Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        this.fragment = new PlaceholderFragment();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, this.fragment)
                     .commit();
         }
     }
@@ -82,13 +84,16 @@ public class MainActivity extends Activity {
 
     private void displayPhoto(File photoFile) {
 
-        Fragment fragment = new FullSizePicture(this);
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        this.
+//        Fragment fragment = new FullSizePicture(this);
+//
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
 //        ((ImageView) findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
+        Bitmap myBitmap = BitmapFactory.decodeFile(this.getPhotoFile().getAbsolutePath());
+        ((ImageView)fragment.getView().findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
 
     }
 
@@ -211,7 +216,8 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_fullsize_image, container, false);
 
             Bitmap myBitmap = BitmapFactory.decodeFile(activity.getPhotoFile().getAbsolutePath());
-            ((ImageView)rootView.findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
+
+//            ((ImageView)rootView.findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
             return rootView;
         }
     }
