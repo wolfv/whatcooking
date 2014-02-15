@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.io.DataOutputStream;
@@ -77,23 +78,35 @@ public class MainActivity extends Activity {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                displayPhoto(photoFile);
             }
         }
     }
 
-    private void displayPhoto(File photoFile) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        this.
-//        Fragment fragment = new FullSizePicture(this);
-//
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.container, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
+
+    private void displayPhoto() {
+
+        Fragment fragment = new FullSizePicture(this);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 //        ((ImageView) findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
-        Bitmap myBitmap = BitmapFactory.decodeFile(this.getPhotoFile().getAbsolutePath());
-        ((ImageView)fragment.getView().findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
+//        Bitmap myBitmap = BitmapFactory.decodeFile(this.getPhotoFile().getAbsolutePath());
+//        this.fragment.on
+//                ((ImageView) this.fragment.getView().findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
 
     }
 
@@ -175,17 +188,18 @@ public class MainActivity extends Activity {
         return true;
     }
 
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case REQUEST_TAKE_PHOTO:
+                if(resultCode==RESULT_OK) {
+                    displayPhoto();
+                }
         }
-        return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -216,9 +230,16 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_fullsize_image, container, false);
 
             Bitmap myBitmap = BitmapFactory.decodeFile(activity.getPhotoFile().getAbsolutePath());
-
 //            ((ImageView)rootView.findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
             return rootView;
+        }
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstance) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(activity.getPhotoFile().getAbsolutePath());
+            ((ImageView)view.findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
+            ((Button)view.findViewById(R.id.button)).setText("Hello");
+            Log.d("Created View", "Image View Created");
         }
     }
 

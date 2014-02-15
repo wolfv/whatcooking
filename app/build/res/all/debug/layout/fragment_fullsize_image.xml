@@ -15,5 +15,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_alignBottom="@+id/fullsizeImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp" />
 </RelativeLayout>
 <!-- From: file:/home/wolf/AndroidStudioProjects/Whatcooking/app/src/main/res/layout/fragment_fullsize_image.xml -->
