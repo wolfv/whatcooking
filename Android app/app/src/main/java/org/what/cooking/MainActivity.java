@@ -1,7 +1,6 @@
 package org.what.cooking;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -16,22 +15,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Observer {
 
     private Fragment fragment;
+    private DataTransfer dataTransfer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,58 +126,6 @@ public class MainActivity extends Activity {
         return image;
     }
 
-    public boolean uploadImageToServer(File image) {
-        try {
-            // think about scaling down the image
-            String bnd = "*******";
-
-            URL url = new URL("http://test.com");
-            FileInputStream fis = new FileInputStream(image);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            connection.setUseCaches(false);
-
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + bnd);
-
-            DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
-            dos.writeBytes("--" + bnd + "\n");
-            dos.writeBytes("Content-Disposition: form-data; name=\"uplfile\"\n");
-            dos.writeBytes("\n");
-
-            int bytesAvail = fis.available();
-            int maxBufSize = 1024 * 1024;
-            int bfs = Math.min(bytesAvail, maxBufSize);
-            byte[] buffer = new byte[bfs];
-
-            int bytesRead = fis.read(buffer, 0, bfs);
-
-            while(bytesRead > 0) {
-                dos.write(buffer, 0, bfs);
-                bytesAvail = fis.available();
-                bfs = Math.min(bytesAvail, maxBufSize);
-                bytesRead = fis.read(buffer, 0, bfs);
-            }
-
-            dos.writeBytes("\n");
-            dos.writeBytes("--" + bnd + "--" + "\n");
-
-            int serverResponseCode = connection.getResponseCode();
-            String serverResponseMessage = connection.getResponseMessage();
-
-            fis.close();
-            dos.flush();
-            dos.close();
-        } catch (Exception ex) {
-            // handle exception
-            Log.e("Error", ex.getMessage());
-        }
-        return true;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
@@ -196,8 +142,37 @@ public class MainActivity extends Activity {
             case REQUEST_TAKE_PHOTO:
                 if(resultCode==RESULT_OK) {
                     displayPhoto();
+                    dataTransfer = DataTransfer.getInstance();
+                    try {
+                        dataTransfer.uploadImage(photoFile.getAbsolutePath());
+                        Toast.makeText(getApplicationContext(),"Uploading...",Toast.LENGTH_SHORT).show();
+
+                    } catch (FileNotFoundException e) {
+                        Log.d("MainActivity","Picture not found!");
+                    }
+                    dataTransfer.addObserver(this);
                 }
         }
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        if(((String)data).equals("UPsuccess"))
+        {
+            dataTransfer.getData();
+            Toast.makeText(getApplicationContext(),"Searching recipes...",Toast.LENGTH_SHORT).show();
+        } else if(((String)data).equals("UPfailure"))
+        {
+            Toast.makeText(getApplicationContext(),"Upload failed!",Toast.LENGTH_SHORT).show();
+        } else if(((String)data).equals("SEARCHfailure"))
+        {
+            Toast.makeText(getApplicationContext(),"Connection to the server lost!",Toast.LENGTH_SHORT).show();
+        } else
+        {
+            Toast.makeText(getApplicationContext(),"We have a receipe!",Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 

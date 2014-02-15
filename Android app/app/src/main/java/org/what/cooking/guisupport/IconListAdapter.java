@@ -24,16 +24,16 @@ public class IconListAdapter extends BaseAdapter {
     private static ArrayList<String> items;
 
     private Integer[] imgid = {
-            R.drawable.marker_free,
-            R.drawable.marker_charged
+//            R.drawable.marker_free,
+//            R.drawable.marker_charged
     };
 
     private LayoutInflater l_Inflater;
 
     public IconListAdapter(Context context) {
         items = new ArrayList<String>();
-        items.add(context.getResources().getString(R.string.free));
-        items.add(context.getResources().getString(R.string.charged));
+//        items.add(context.getResources().getString(R.string.free));
+//        items.add(context.getResources().getString(R.string.charged));
         l_Inflater = LayoutInflater.from(context);
     }
 
@@ -50,23 +50,23 @@ public class IconListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = l_Inflater.inflate(R.layout.freeorcharged_item_searchlist, null);
-            holder = new ViewHolder();
-            holder.label = (TextView) convertView.findViewById(R.id.searchFreeOrChargedLabel);
-            ((TextView)convertView.findViewById(R.id.searchFreeOrChargedLabel)).setTypeface(Typeface.createFromAsset(convertView.getContext().getAssets(), "fonts/CANDARA.TTF"));
-            holder.icon = (ImageView) convertView.findViewById(R.id.searchFreeOrChargedIcon);
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.searchFreeOrChargedCheckbox);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        holder.label.setText(items.get(position));
-        holder.icon.setImageResource(imgid[position]);
-        holder.checkBox.setChecked(true);
+//        ViewHolder holder;
+//        if (convertView == null) {
+////            convertView = l_Inflater.inflate(R.layout.freeorcharged_item_searchlist, null);
+////            holder = new ViewHolder();
+////            holder.label = (TextView) convertView.findViewById(R.id.searchFreeOrChargedLabel);
+////            ((TextView)convertView.findViewById(R.id.searchFreeOrChargedLabel)).setTypeface(Typeface.createFromAsset(convertView.getContext().getAssets(), "fonts/CANDARA.TTF"));
+////            holder.icon = (ImageView) convertView.findViewById(R.id.searchFreeOrChargedIcon);
+////            holder.checkBox = (CheckBox) convertView.findViewById(R.id.searchFreeOrChargedCheckbox);
+//
+////            convertView.setTag(holder);
+//        } else {
+//            holder = (ViewHolder) convertView.getTag();
+//        }
+//
+//        holder.label.setText(items.get(position));
+//        holder.icon.setImageResource(imgid[position]);
+//        holder.checkBox.setChecked(true);
 
         return convertView;
     }
