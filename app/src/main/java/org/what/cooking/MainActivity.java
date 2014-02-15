@@ -238,7 +238,6 @@ public class MainActivity extends Activity {
         public void onViewCreated(View view, Bundle savedInstance) {
             Bitmap myBitmap = BitmapFactory.decodeFile(activity.getPhotoFile().getAbsolutePath());
             ((ImageView)view.findViewById(R.id.fullsizeImage)).setImageBitmap(myBitmap);
-            ((Button)view.findViewById(R.id.button)).setText("Hello");
             Log.d("Created View", "Image View Created");
         }
     }
